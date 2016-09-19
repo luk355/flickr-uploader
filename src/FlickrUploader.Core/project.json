@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "UnifiedMediatR": "0.0.1-beta-0006"
+  },
+
+  "frameworks": {
+    "net461": {
+      "dependencies": {
+      }
+    },
+    "netstandard1.6": {
+      "NETStandard.Library": "1.6.0",
+      "imports": "dnxcore50"
+    }
+  }
+}
