@@ -25,7 +25,9 @@ namespace FlickrUploader.Console.DependencyResolution
             For<IMediator>().Use<Mediator>();
             For<IUnifiedMediator<string>>().Use<UnifiedMediator<string>>();
 
-            For<IFlickrClient>().Use<FlickrClient>().Ctor<string>("apiKey").Is(ApplicationSettings.FlickrApiKey);
+            For<IFlickrClient>().Use<FlickrClient>()
+                .Ctor<string>("apiKey").Is(ApplicationSettings.Flickr.ApiKey)
+                .Ctor<string>("secret").Is(ApplicationSettings.Flickr.Secret);
         }
     }
 }

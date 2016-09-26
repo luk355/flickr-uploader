@@ -1,4 +1,6 @@
-﻿using FlickrUploader.Business.Queries;
+﻿using FlickrUploader.Business.Commands;
+using FlickrUploader.Business.Commands.Flickr;
+using FlickrUploader.Business.Queries;
 using UnifiedMediatR.Mediator;
 
 namespace FlickrUploader.Console
@@ -14,6 +16,12 @@ namespace FlickrUploader.Console
 
         public void Run()
         {
+            _mediator.Execute(new SendAuthenticationRequestCommand());
+
+            string code = System.Console.ReadLine();
+
+            _mediator.Execute(new CompleteAutenticationCommand(code));
+
             _mediator.Query(new GetPhotosetIdByName("test"));
         }
     }

@@ -8,9 +8,26 @@ namespace FlickrUploader.Business
     {
         private readonly Flickr _flickr;
 
-        public FlickrClient(string apiKey)
+        private OAuthRequestToken requestToken;
+
+        public FlickrClient(string apiKey, string secret)
         {
-            _flickr = new Flickr(apiKey);
+            _flickr = new Flickr(apiKey, secret);
+           
+        }
+
+        public void SendAuthenticationRequest()
+        {
+            requestToken = _flickr.OAuthGetRequestToken("oob");
+
+            string url = _flickr.OAuthCalculateAuthorizationUrl(requestToken.Token, AuthLevel.Write);
+
+            System.Diagnostics.Process.Start(url);
+        }
+
+        public void CompleteAutentication(string code)
+        {
+            _flickr.OAuthGetAccessToken(requestToken, code);
         }
 
         public string UploadPicture(string fileName, string title)

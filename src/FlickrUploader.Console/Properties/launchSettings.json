@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "FlickrUploader.Console": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "Key": "Value"
+      }
+    }
+  }
+}
