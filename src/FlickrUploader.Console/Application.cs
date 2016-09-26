@@ -17,10 +17,11 @@ namespace FlickrUploader.Console
         public void Run()
         {
             _mediator.Execute(new SendAuthenticationRequestCommand());
-
+            System.Console.WriteLine("Please provide authentication code: ");
             string code = System.Console.ReadLine();
+            _mediator.Execute(new CompleteAutenticationCommand(code.Replace("-",string.Empty)));
 
-            _mediator.Execute(new CompleteAutenticationCommand(code));
+            _mediator.ExecuteAsync(new UploadFolderCommand() {Path = ApplicationSettings.PhotoPath});
 
             _mediator.Query(new GetPhotosetIdByName("test"));
         }

@@ -3,6 +3,8 @@
 
   "dependencies": {
     "FlickrUploader.Core": "1.0.0-*",
+    "Serilog": "2.2.1",
+    "System.IO.Abstractions": "2.0.0.124",
     "UnifiedMediatR": "0.0.1-beta-0006"
   },
 

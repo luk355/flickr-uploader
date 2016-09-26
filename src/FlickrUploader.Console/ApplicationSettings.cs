@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Net.NetworkInformation;
+using System.Runtime.CompilerServices;
 
 namespace FlickrUploader.Console
 {
@@ -10,5 +11,7 @@ namespace FlickrUploader.Console
             public static string ApiKey => "3c520555f1a86a15577ba8923473b707";
             public static string Secret => "9cf5cdb3d0498139";
         }
+
+        public static string PhotoPath => "C:\\Users\\lbehal\\Pictures\\kiwi_new";
     }
 }

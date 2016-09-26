@@ -1,4 +1,5 @@
-﻿using FlickrUploader.Business;
+﻿using System.IO.Abstractions;
+using FlickrUploader.Business;
 using FlickrUploader.Business.Commands;
 using MediatR;
 using StructureMap;
@@ -28,6 +29,8 @@ namespace FlickrUploader.Console.DependencyResolution
             For<IFlickrClient>().Use<FlickrClient>()
                 .Ctor<string>("apiKey").Is(ApplicationSettings.Flickr.ApiKey)
                 .Ctor<string>("secret").Is(ApplicationSettings.Flickr.Secret);
+
+            For<IFileSystem>().Use<FileSystem>();
         }
     }
 }
