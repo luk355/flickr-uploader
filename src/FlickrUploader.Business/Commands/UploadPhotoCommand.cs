@@ -5,7 +5,7 @@ namespace FlickrUploader.Business.Commands
 {
     public class UploadPhotoCommand : ICommand
     {
-        public string PhotoSet { get; set; }
+        public string PhotosetName { get; set; }
         public string Path { get; set; }
     }
 }

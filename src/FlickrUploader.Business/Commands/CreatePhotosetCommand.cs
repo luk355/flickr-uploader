@@ -6,8 +6,11 @@ namespace FlickrUploader.Business.Commands
     {
         public string Name { get; set; }
 
-        public CreatePhotosetCommand(string name)
+        public string PrimaryPhotoId { get; set; }
+
+        public CreatePhotosetCommand(string name, string primaryPhotoId)
         {
+            PrimaryPhotoId = primaryPhotoId;
             Name = name;
         }
     }

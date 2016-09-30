@@ -18,15 +18,12 @@ namespace FlickrUploader.Console
                 container.AssertConfigurationIsValid();
 
                 var app = container.GetInstance<Application>();
-                app.Run();
+                app.Run().Wait();
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Error!");
             }
-            
-
-            System.Console.ReadKey();
         }
 
     }

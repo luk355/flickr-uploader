@@ -12,6 +12,7 @@ namespace FlickrUploader.Console
         private static void ConfigureLogging()
         {
             Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
                 .WriteTo.ColoredConsole()
                 .CreateLogger();
         }

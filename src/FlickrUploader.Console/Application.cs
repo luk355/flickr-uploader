@@ -1,6 +1,8 @@
-﻿using FlickrUploader.Business.Commands;
+﻿using System.Threading.Tasks;
+using FlickrUploader.Business.Commands;
 using FlickrUploader.Business.Commands.Flickr;
 using FlickrUploader.Business.Queries;
+using Serilog;
 using UnifiedMediatR.Mediator;
 
 namespace FlickrUploader.Console
@@ -14,16 +16,21 @@ namespace FlickrUploader.Console
             _mediator = mediator;
         }
 
-        public void Run()
+        public Task Run()
         {
-            _mediator.Execute(new SendAuthenticationRequestCommand());
-            System.Console.WriteLine("Please provide authentication code: ");
-            string code = System.Console.ReadLine();
-            _mediator.Execute(new CompleteAutenticationCommand(code.Replace("-",string.Empty)));
+            return Task.Factory.StartNew(() =>
+            {
+                _mediator.Execute(new SendAuthenticationRequestCommand());
+                System.Console.WriteLine("Please provide authentication code: ");
+                string code = System.Console.ReadLine();
 
-            _mediator.ExecuteAsync(new UploadFolderCommand() {Path = ApplicationSettings.PhotoPath});
+                _mediator.Execute(new CompleteAutenticationCommand(code.Replace("-", string.Empty)));
 
-            _mediator.Query(new GetPhotosetIdByName("test"));
+                _mediator.ExecuteAsync(new UploadFolderCommand() {Path = ApplicationSettings.PhotoPath}).Wait();
+
+                Log.Information("All done! Pres any key to end application :)");
+                System.Console.ReadKey();
+            });
         }
     }
 }

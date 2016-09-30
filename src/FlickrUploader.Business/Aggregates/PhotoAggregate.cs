@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Threading.Tasks;
-using FlickrNet;
 using FlickrUploader.Business.Commands;
-using FlickrUploader.Business.Queries;
+using FlickrUploader.Business.DomainEvents;
 using MediatR;
 using Serilog;
 using UnifiedMediatR.Mediator;
 
 namespace FlickrUploader.Business.Aggregates
 {
-    public class PhotoAggregate : ICommandHandler<UploadPhotoCommand>, IAsyncCommandHandler<UploadFolderCommand>, IAsyncCommandHandler<UploadPhotosFromFolderCommand>
+    public class PhotoAggregate : ICommandHandler<UploadPhotoCommand>, IAsyncCommandHandler<UploadPhotosFromFolderCommand>
     {
         private readonly IFlickrClient _flickrClient;
         private readonly IFileSystem _fileSystem;
@@ -29,13 +27,19 @@ namespace FlickrUploader.Business.Aggregates
 
         public Unit Handle(UploadPhotoCommand message)
         {
-            var flickr = new Flickr();
-
             // upload photo
+            var id = _flickrClient.UploadPicture(message.Path, Path.GetFileName(message.Path));
 
-            // add photo to photo set
+            // add photo to photoset
+            _mediator.Execute(new AddPhotoToPhotosetCommand()
+            {
+                PhotoId = id,
+                PhotosetName = message.PhotosetName
+            });
 
-            throw new System.NotImplementedException();
+            _mediator.PublishAsync(new PhotoUploadedEvent() { Id = id, PhotoSet = message.PhotosetName });
+
+            return Unit.Value;
         }
 
         public Task<Unit> Handle(UploadPhotosFromFolderCommand message)
@@ -54,61 +58,28 @@ namespace FlickrUploader.Business.Aggregates
 
                 if (!photos.Any())
                 {
-                    Log.Information("No photos find in {PhotoFolder}", message.FolderPath);
+                    Log.Information("No photos found in {PhotoFolder}", message.FolderPath);
                     return Unit.Value;
                 }
 
                 // get photoSet
                 var photosetName = dirInfo.Name;
 
-
-                var photoSetId = _mediator.Query(new GetPhotosetIdByName(photosetName));
-
-                // create photoset if not exists
-                if (string.IsNullOrEmpty(photoSetId))
-                {
-                    photosetName = _mediator.Execute(new CreatePhotosetCommand(photosetName));
-                }
-
-                if (string.IsNullOrEmpty(photoSetId))
-                {
-                    throw new UnableToCreatePhotoSetException($"Unable to create {photosetName} photoset.");
-                }
-
                 // upload photos one by one
-                throw new NotImplementedException();
+
+                Log.Information("Uploading {Photos} located in {Folder}.", photos.Select(x => x.Name), message.FolderPath);
+                foreach (var photo in photos)
+                {
+                    _mediator.Execute(new UploadPhotoCommand() { Path = photo.FullName, PhotosetName = photosetName });
+                }
+
+                _mediator.Publish(new PhotosFromFolderUploadedEvent() { Id = message.FolderPath });
 
                 return Unit.Value;
             });
         }
 
-        Task<Unit> IAsyncRequestHandler<UploadFolderCommand, Unit>.Handle(UploadFolderCommand message)
-        {
-            return Task<Unit>.Factory.StartNew(() =>
-            {
-                var dirInfo = _fileSystem.DirectoryInfo.FromDirectoryName(message.Path);
 
-                if (!dirInfo.Exists)
-                {
-                    Log.Error("Folder {FolderName} does not exist!", message.Path);
-                    return Unit.Value;
-                }
-
-                List<Task> tasks = new List<Task>();
-
-                // Upload all photos in folder
-                tasks.Add(_mediator.ExecuteAsync(new UploadPhotosFromFolderCommand() { FolderPath = message.Path }));
-
-                // Upload photos for all subfolders
-                foreach (var directory in dirInfo.EnumerateDirectories())
-                {
-                    tasks.Add(_mediator.ExecuteAsync(new UploadFolderCommand() { Path = directory.FullName }));
-                }
-
-                Task.WaitAll(tasks.ToArray());
-                return Unit.Value;
-            });
-        }
     }
 
     public class UnableToCreatePhotoSetException : Exception

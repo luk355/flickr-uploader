@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0.0-*",
   "buildOptions": {
     "emitEntryPoint": true
@@ -8,7 +8,8 @@
     "FlickrUploader.Business": "1.0.0-*",
     "Serilog": "2.2.1",
     "Serilog.Sinks.ColoredConsole": "2.0.0",
-    "StructureMap": "4.4.1"
+    "StructureMap": "4.4.1",
+    "UnifiedMediatR": "0.0.1-beta-0010"
   },
 
   "frameworks": {

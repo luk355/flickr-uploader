@@ -2,7 +2,7 @@
   "version": "1.0.0-*",
 
   "dependencies": {
-    "UnifiedMediatR": "0.0.1-beta-0006"
+    "UnifiedMediatR": "0.0.1-beta-0010"
   },
 
   "frameworks": {
