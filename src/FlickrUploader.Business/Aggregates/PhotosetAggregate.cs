@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FlickrUploader.Business.Commands;
 using FlickrUploader.Business.DomainEvents;
+using FlickrUploader.Business.Exceptions;
 using FlickrUploader.Business.Queries;
 using MediatR;
 using UnifiedMediatR.Mediator;
