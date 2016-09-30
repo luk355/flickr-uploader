@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.IO.Abstractions;
+using System.Linq;
 using System.Threading.Tasks;
 using FlickrUploader.Business.Commands;
 using MediatR;
@@ -13,6 +15,8 @@ namespace FlickrUploader.Business.Aggregates
         private readonly IFlickrClient _flickrClient;
         private readonly IFileSystem _fileSystem;
         private readonly IUnifiedMediator<string> _mediator;
+
+        private const string ProcessedFileName = ".processed";
 
         public FolderAggregate(IFlickrClient flickrClient, IFileSystem fileSystem, IUnifiedMediator<string> mediator)
         {
@@ -33,6 +37,18 @@ namespace FlickrUploader.Business.Aggregates
                     return Unit.Value;
                 }
 
+                if ((dirInfo.Attributes & FileAttributes.ReadOnly) != 0)
+                {
+                    Log.Error("Missing write rights to folder {FolderName}!", message.Path);
+                    return Unit.Value;
+                }
+
+                if (dirInfo.EnumerateFiles(ProcessedFileName).Any())
+                {
+                    Log.Information("Folder {FolderName} has been already processed. Skipping...", message.Path);
+                    return Unit.Value;
+                }
+
                 List<Task> tasks = new List<Task>();
 
                 // Upload all photos in folder
@@ -45,6 +61,10 @@ namespace FlickrUploader.Business.Aggregates
                 }
 
                 Task.WaitAll(tasks.ToArray());
+
+                // creates processed file in folder
+                var processedFile = new FileInfo(Path.Combine(dirInfo.FullName, ProcessedFileName));
+                processedFile.Create().Close();
 
                 Log.Information("Upload of all photos within folder {FolderPath} is finished!", message.Path);
 

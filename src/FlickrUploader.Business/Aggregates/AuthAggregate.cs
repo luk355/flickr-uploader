@@ -4,11 +4,11 @@ using UnifiedMediatR.Mediator;
 
 namespace FlickrUploader.Business.Aggregates
 {
-    public class FlickrAggregate : ICommandHandler<SendAuthenticationRequestCommand>, ICommandHandler<CompleteAutenticationCommand>
+    public class AuthAggregate : ICommandHandler<SendAuthenticationRequestCommand>, ICommandHandler<CompleteAutenticationCommand>
     {
         private readonly IFlickrClient _flickrClient;
 
-        public FlickrAggregate(IFlickrClient flickrClient)
+        public AuthAggregate(IFlickrClient flickrClient)
         {
             _flickrClient = flickrClient;
         }

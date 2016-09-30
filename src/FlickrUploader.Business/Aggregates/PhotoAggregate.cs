@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
@@ -67,7 +66,7 @@ namespace FlickrUploader.Business.Aggregates
 
                 // upload photos one by one
 
-                Log.Information("Uploading {Photos} located in {Folder}.", photos.Select(x => x.Name), message.FolderPath);
+                Log.Information("Uploading {Photos} photos located in {Folder} folder.", photos.Select(x => x.Name), message.FolderPath);
                 foreach (var photo in photos)
                 {
                     _mediator.Execute(new UploadPhotoCommand() { Path = photo.FullName, PhotosetName = photosetName });

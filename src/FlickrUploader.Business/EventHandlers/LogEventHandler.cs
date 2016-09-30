@@ -11,9 +11,9 @@ namespace FlickrUploader.Business.EventHandlers
         public Task Handle(IAsyncDomainEvent notification)
         {
             return Task.Factory.StartNew(() =>
-            {
-                Log.Debug("Async Domain event {EventType} recorded: {@Event}.", notification.GetType().Name, notification);
-            }
+                {
+                    Log.Debug("Async Domain event {EventType} recorded: {@Event}.", notification.GetType().Name, notification);
+                }
             );
         }
 

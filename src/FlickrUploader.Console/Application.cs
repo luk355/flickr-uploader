@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using FlickrUploader.Business.Commands;
 using FlickrUploader.Business.Commands.Flickr;
-using FlickrUploader.Business.Queries;
 using Serilog;
 using UnifiedMediatR.Mediator;
 
@@ -28,7 +27,7 @@ namespace FlickrUploader.Console
 
                 _mediator.ExecuteAsync(new UploadFolderCommand() {Path = ApplicationSettings.PhotoPath}).Wait();
 
-                Log.Information("All done! Pres any key to end application :)");
+                Log.Information("All done! Pres any key to end the application :)");
                 System.Console.ReadKey();
             });
         }
