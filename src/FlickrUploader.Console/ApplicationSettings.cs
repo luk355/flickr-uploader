@@ -12,6 +12,6 @@ namespace FlickrUploader.Console
             public static string Secret => "9cf5cdb3d0498139";
         }
 
-        public static string PhotoPath => "C:\\Users\\lbehal\\Pictures\\kiwi_new";
+        public static string PhotoPath => @"C:\Sample images";
     }
 }

@@ -7,6 +7,7 @@ using FlickrUploader.Business.Commands;
 using MediatR;
 using Serilog;
 using UnifiedMediatR.Mediator;
+using FlickrUploader.Business.Extensions;
 
 namespace FlickrUploader.Business.Aggregates
 {
@@ -37,10 +38,18 @@ namespace FlickrUploader.Business.Aggregates
                     return Unit.Value;
                 }
 
-                if ((dirInfo.Attributes & FileAttributes.ReadOnly) != 0)
+                if (!dirInfo.HasWritePermisssion())
                 {
                     Log.Error("Missing write rights to folder {FolderName}!", message.Path);
                     return Unit.Value;
+                }
+
+                List<Task> tasks = new List<Task>();
+
+                // upload photos from all sub-folders
+                foreach (var directory in dirInfo.EnumerateDirectories())
+                {
+                    tasks.Add(_mediator.ExecuteAsync(new UploadFolderCommand() { Path = directory.FullName }));
                 }
 
                 if (dirInfo.EnumerateFiles(ProcessedFileName).Any())
@@ -49,16 +58,8 @@ namespace FlickrUploader.Business.Aggregates
                     return Unit.Value;
                 }
 
-                List<Task> tasks = new List<Task>();
-
                 // Upload all photos in folder
                 tasks.Add(_mediator.ExecuteAsync(new UploadPhotosFromFolderCommand() { FolderPath = message.Path }));
-
-                // upload photos from all sub-folders
-                foreach (var directory in dirInfo.EnumerateDirectories())
-                {
-                    tasks.Add(_mediator.ExecuteAsync(new UploadFolderCommand() { Path = directory.FullName }));
-                }
 
                 Task.WaitAll(tasks.ToArray());
 
