@@ -25,7 +25,7 @@ namespace FlickrUploader.Console
 
                 _mediator.Execute(new CompleteAutenticationCommand(code.Replace("-", string.Empty)));
 
-                _mediator.ExecuteAsync(new UploadFolderCommand() {Path = ApplicationSettings.PhotoPath}).Wait();
+                _mediator.Execute(new UploadFolderCommand() {Path = ApplicationSettings.PhotoPath});
 
                 Log.Information("All done! Pres any key to end the application :)");
                 System.Console.ReadKey();

@@ -2,7 +2,7 @@
 
 namespace FlickrUploader.Business.Commands
 {
-    public class UploadPhotosFromFolderCommand : IAsyncCommand
+    public class UploadPhotosFromFolderCommand : ICommand
     {
         public string FolderPath { get; set; }
     }

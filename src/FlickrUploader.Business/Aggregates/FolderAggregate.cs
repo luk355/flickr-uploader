@@ -11,7 +11,7 @@ using FlickrUploader.Business.Extensions;
 
 namespace FlickrUploader.Business.Aggregates
 {
-    public class FolderAggregate : IAsyncCommandHandler<UploadFolderCommand>
+    public class FolderAggregate : ICommandHandler<UploadFolderCommand>
     {
         private readonly IFlickrClient _flickrClient;
         private readonly IFileSystem _fileSystem;
@@ -26,51 +26,44 @@ namespace FlickrUploader.Business.Aggregates
             _mediator = mediator;
         }
 
-        Task<Unit> IAsyncRequestHandler<UploadFolderCommand, Unit>.Handle(UploadFolderCommand message)
+        Unit IRequestHandler<UploadFolderCommand, Unit>.Handle(UploadFolderCommand message)
         {
-            return Task<Unit>.Factory.StartNew(() =>
+            var dirInfo = _fileSystem.DirectoryInfo.FromDirectoryName(message.Path);
+
+            if (!dirInfo.Exists)
             {
-                var dirInfo = _fileSystem.DirectoryInfo.FromDirectoryName(message.Path);
-
-                if (!dirInfo.Exists)
-                {
-                    Log.Error("Folder {FolderName} does not exist!", message.Path);
-                    return Unit.Value;
-                }
-
-                if (!dirInfo.HasWritePermisssion())
-                {
-                    Log.Error("Missing write rights to folder {FolderName}!", message.Path);
-                    return Unit.Value;
-                }
-
-                List<Task> tasks = new List<Task>();
-
-                // upload photos from all sub-folders
-                foreach (var directory in dirInfo.EnumerateDirectories())
-                {
-                    tasks.Add(_mediator.ExecuteAsync(new UploadFolderCommand() { Path = directory.FullName }));
-                }
-
-                if (dirInfo.EnumerateFiles(ProcessedFileName).Any())
-                {
-                    Log.Information("Folder {FolderName} has been already processed. Skipping...", message.Path);
-                    return Unit.Value;
-                }
-
-                // Upload all photos in folder
-                tasks.Add(_mediator.ExecuteAsync(new UploadPhotosFromFolderCommand() { FolderPath = message.Path }));
-
-                Task.WaitAll(tasks.ToArray());
-
-                // creates processed file in folder
-                var processedFile = new FileInfo(Path.Combine(dirInfo.FullName, ProcessedFileName));
-                processedFile.Create().Close();
-
-                Log.Information("Upload of all photos within folder {FolderPath} is finished!", message.Path);
-
+                Log.Error("Folder {FolderName} does not exist!", message.Path);
                 return Unit.Value;
-            });
+            }
+
+            if (!dirInfo.HasWritePermisssion())
+            {
+                Log.Error("Missing write rights to folder {FolderName}!", message.Path);
+                return Unit.Value;
+            }
+
+            // upload photos from all sub-folders
+            foreach (var directory in dirInfo.EnumerateDirectories())
+            {
+                _mediator.Execute(new UploadFolderCommand() { Path = directory.FullName });
+            }
+
+            if (dirInfo.EnumerateFiles(ProcessedFileName).Any())
+            {
+                Log.Information("Folder {FolderName} has been already processed. Skipping...", message.Path);
+                return Unit.Value;
+            }
+
+            // Upload all photos in folder
+            _mediator.Execute(new UploadPhotosFromFolderCommand() { FolderPath = message.Path });
+
+            // creates processed file in folder
+            var processedFile = new FileInfo(Path.Combine(dirInfo.FullName, ProcessedFileName));
+            processedFile.Create().Close();
+
+            Log.Information("Upload of all photos within folder {FolderPath} is finished!", message.Path);
+
+            return Unit.Value;
         }
     }
 }
