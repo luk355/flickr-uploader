@@ -31,7 +31,7 @@ namespace FlickrUploader.Business.Commands
             public Unit Handle(Command message)
             {
                 // upload photo
-                var id = _flickrClient.UploadPicture(message.Path, Path.GetFileName(message.Path));
+                var id = _flickrClient.UploadPicture(message.Path, Path.GetFileNameWithoutExtension(message.Path));
 
                 // add photo to photoset
                 _mediator.Execute(new AddPhotoToPhotoset.Command()
