@@ -1,7 +1,7 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using FlickrNet;
+using FlickrUploader.Business.Extensions;
 
 namespace FlickrUploader.Business
 {
@@ -14,7 +14,7 @@ namespace FlickrUploader.Business
         public FlickrClient(string apiKey, string secret)
         {
             _flickr = new Flickr(apiKey, secret);
-           
+
         }
 
         public void SendAuthenticationRequest()
@@ -33,10 +33,14 @@ namespace FlickrUploader.Business
 
         public string UploadPicture(string path, string title, bool isPublic = false, bool isFamily = false, bool isFriend = false)
         {
-            string fileName1 = Path.GetFileName(title);
-            using (Stream stream = (Stream)new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            string fileName = Path.GetFileName(title);
+
+            using (Stream stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                string str = _flickr.UploadPicture(stream, fileName1, title, "", "AutoUploaded", false, false, false, ContentType.None, SafetyLevel.None, HiddenFromSearch.None);
+                var keywords = ImageUtils.GetKeywords(stream);
+                keywords.Add("AutoUploaded");
+
+                string str = _flickr.UploadPicture(stream, fileName, title, "", keywords.Aggregate(string.Empty, (e,r) => $"{r},{e}"), false, false, false, ContentType.None, SafetyLevel.None, HiddenFromSearch.None);
                 stream.Close();
                 return str;
             }
