@@ -40,13 +40,13 @@ namespace FlickrUploader.Business.Commands
                     PhotosetName = message.PhotosetName
                 });
 
-                _mediator.PublishAsync(new PhotoUploadedEvent() { Id = id, PhotoSet = message.PhotosetName });
+                _mediator.Publish(new PhotoUploadedEvent() { Id = id, PhotoSet = message.PhotosetName });
 
                 return Unit.Value;
             }
         }
 
-        public class PhotoUploadedEvent : IAsyncDomainEvent
+        public class PhotoUploadedEvent : IDomainEvent
         {
             public string Id { get; set; }
 

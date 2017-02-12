@@ -66,14 +66,14 @@ namespace FlickrUploader.Business.Commands
                 var processedFile = new FileInfo(Path.Combine(dirInfo.FullName, ProcessedFileName));
                 processedFile.Create().Close();
 
-                _mediator.PublishAsync(new FolderUploadedEvent() { Id = message.Path });
+                _mediator.Publish(new FolderUploadedEvent() { Id = message.Path });
                 Log.Information("Upload of all photos within folder {FolderPath} is finished!", message.Path);
 
                 return Unit.Value;
             }
         }
 
-        public class FolderUploadedEvent : IAsyncDomainEvent
+        public class FolderUploadedEvent : IDomainEvent
         {
             public string Id { get; set; }
         }

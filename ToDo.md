@@ -4,7 +4,7 @@
 - [x] strip away JPG ending
 - [x] Fix folder permission check
 - [ ] check if picture has been uploaded already - do not upload if already existing
-- [ ] Sync commands
+- [x] Sync commands
 
 ## Nice to have
 - [ ] Progress bar on upload
