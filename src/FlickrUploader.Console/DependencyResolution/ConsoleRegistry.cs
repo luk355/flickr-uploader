@@ -14,7 +14,7 @@ namespace FlickrUploader.Console.DependencyResolution
             // MediatR
             Scan(scanner =>
             {
-                scanner.AssemblyContainingType<CreatePhotosetCommand>(); // bussiness assembly
+                scanner.AssemblyContainingType<CreatePhotoset.Command>(); // bussiness assembly
                 scanner.TheCallingAssembly(); // this assembly
                 scanner.ConnectImplementationsToTypesClosing(typeof(IRequestHandler<,>));
                 scanner.ConnectImplementationsToTypesClosing(typeof(IAsyncRequestHandler<,>));

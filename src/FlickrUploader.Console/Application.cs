@@ -19,13 +19,13 @@ namespace FlickrUploader.Console
         {
             return Task.Factory.StartNew(() =>
             {
-                _mediator.Execute(new SendAuthenticationRequestCommand());
+                _mediator.Execute(new SendAuthenticationRequest.Command());
                 System.Console.WriteLine("Please provide authentication code: ");
                 string code = System.Console.ReadLine();
 
-                _mediator.Execute(new CompleteAutenticationCommand(code.Replace("-", string.Empty)));
+                _mediator.Execute(new CompleteAutentication.Command(code.Replace("-", string.Empty)));
 
-                _mediator.Execute(new UploadFolderCommand() {Path = ApplicationSettings.PhotoPath});
+                _mediator.Execute(new UploadFolder.Command() {Path = ApplicationSettings.PhotoPath});
 
                 Log.Information("All done! Pres any key to end the application :)");
                 System.Console.ReadKey();
