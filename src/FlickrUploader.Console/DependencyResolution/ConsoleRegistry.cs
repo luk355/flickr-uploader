@@ -4,6 +4,7 @@ using FlickrUploader.Business.Commands;
 using MediatR;
 using StructureMap;
 using UnifiedMediatR.Mediator;
+using FlickrUploader.Business.Features.Auth;
 
 namespace FlickrUploader.Console.DependencyResolution
 {
@@ -31,6 +32,7 @@ namespace FlickrUploader.Console.DependencyResolution
                 .Ctor<string>("secret").Is(ApplicationSettings.Flickr.Secret);
 
             For<IFileSystem>().Use<FileSystem>();
+            For<IAuthCodeProvider>().Use<ConsoleAuthCodeProvider>();
         }
     }
 }

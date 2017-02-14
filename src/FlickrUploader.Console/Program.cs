@@ -24,6 +24,7 @@ namespace FlickrUploader.Console
             catch (Exception ex)
             {
                 Log.Error(ex, "Error!");
+                System.Console.ReadKey();
             }
         }
 

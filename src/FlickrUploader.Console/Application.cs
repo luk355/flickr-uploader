@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using FlickrUploader.Business.Commands;
-using FlickrUploader.Business.Commands.Flickr;
 using Serilog;
 using UnifiedMediatR.Mediator;
+using FlickrUploader.Business.Features.Auth;
 
 namespace FlickrUploader.Console
 {
@@ -19,11 +19,7 @@ namespace FlickrUploader.Console
         {
             return Task.Factory.StartNew(() =>
             {
-                _mediator.Execute(new SendAuthenticationRequest.Command());
-                System.Console.WriteLine("Please provide authentication code: ");
-                string code = System.Console.ReadLine();
-
-                _mediator.Execute(new CompleteAutentication.Command(code.Replace("-", string.Empty)));
+                _mediator.Execute(new AuthenticateUser.Command());
 
                 _mediator.Execute(new UploadFolder.Command() {Path = ApplicationSettings.PhotoPath});
 
