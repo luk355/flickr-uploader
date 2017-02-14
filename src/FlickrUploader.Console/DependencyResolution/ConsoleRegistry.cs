@@ -34,7 +34,7 @@ namespace FlickrUploader.Console.DependencyResolution
 
             For<IFileSystem>().Use<FileSystem>();
             For<IAuthCodeProvider>().Use<ConsoleAuthCodeProvider>();
-            For<IPersistentStorage>().Use<FunkyTestPersistantStorage>();
+            For<IPersistentStorage>().Use<JsonFilePersistantStorage>();
         }
     }
 }
