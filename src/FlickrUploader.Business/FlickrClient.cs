@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using FlickrNet;
 using FlickrUploader.Business.Extensions;
@@ -40,7 +41,7 @@ namespace FlickrUploader.Business
                 var keywords = ImageUtils.GetKeywords(stream);
                 keywords.Add("AutoUploaded");
 
-                string str = _flickr.UploadPicture(stream, fileName, title, "", keywords.Aggregate(string.Empty, (e,r) => $"{r},{e}"), false, false, false, ContentType.None, SafetyLevel.None, HiddenFromSearch.None);
+                string str = _flickr.UploadPicture(stream, fileName, title, "", keywords.Aggregate(string.Empty, (e, r) => $"{r},{e}"), false, false, false, ContentType.None, SafetyLevel.None, HiddenFromSearch.None);
                 stream.Close();
                 return str;
             }
@@ -59,6 +60,36 @@ namespace FlickrUploader.Business
         public PhotosetCollection PhotosetsGetList()
         {
             return _flickr.PhotosetsGetList();
+        }
+
+        (string token, string secret) IFlickrClient.GetAccessToken()
+        {
+            return (_flickr.OAuthAccessToken, _flickr.OAuthAccessTokenSecret);
+        }
+
+        public void SetAccessToken(string token, string secret)
+        {
+            _flickr.OAuthAccessToken = token;
+            _flickr.OAuthAccessTokenSecret = secret;
+        }
+
+        public bool IsAccessTokenValid()
+        {
+            try
+            {
+                var auth = _flickr.AuthOAuthCheckToken();
+
+                if (auth == null || auth.User == null)
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

@@ -29,10 +29,12 @@ namespace FlickrUploader.Console.DependencyResolution
 
             For<IFlickrClient>().Use<FlickrClient>()
                 .Ctor<string>("apiKey").Is(ApplicationSettings.Flickr.ApiKey)
-                .Ctor<string>("secret").Is(ApplicationSettings.Flickr.Secret);
+                .Ctor<string>("secret").Is(ApplicationSettings.Flickr.Secret)
+                .Singleton();
 
             For<IFileSystem>().Use<FileSystem>();
             For<IAuthCodeProvider>().Use<ConsoleAuthCodeProvider>();
+            For<IPersistentStorage>().Use<FunkyTestPersistantStorage>();
         }
     }
 }

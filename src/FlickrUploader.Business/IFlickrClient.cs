@@ -16,6 +16,12 @@ namespace FlickrUploader.Business
 
         void AddPhotoToPhotoset(string photoId, string photosetId);
 
+        (string token, string secret) GetAccessToken();
+
+        void SetAccessToken(string token, string secret);
+
+        bool IsAccessTokenValid();
+
         PhotosetCollection PhotosetsGetList();
     }
 }
