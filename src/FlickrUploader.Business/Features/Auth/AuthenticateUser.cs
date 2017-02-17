@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using UnifiedMediatR.Mediator;
-using FlickrUploader.Business.Commands.Flickr;
 
 namespace FlickrUploader.Business.Features.Auth
 {
@@ -52,13 +46,13 @@ namespace FlickrUploader.Business.Features.Auth
                 _flickrClient.ResetAccessData();
 
                 // send auth request
-                _mediator.Execute(new SendAuthenticationRequest.Command());
+                _flickrClient.SendAuthenticationRequest();
 
                 // get auth key
                 string code = _authCodeProvider.GetCode();
 
                 // complete auth
-                _mediator.Execute(new CompleteAutentication.Command(code));
+                _flickrClient.CompleteAutentication(code);
 
                 // persist auth token to persistant storage
                 var newAccessData = _flickrClient.GetAccessToken();
