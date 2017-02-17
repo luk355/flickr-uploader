@@ -47,6 +47,10 @@ namespace FlickrUploader.Business.Features.Auth
                 }
 
                 // if this does not work authorise again
+
+                // reset flickr access data
+                _flickrClient.ResetAccessData();
+
                 // send auth request
                 _mediator.Execute(new SendAuthenticationRequest.Command());
 
@@ -58,7 +62,7 @@ namespace FlickrUploader.Business.Features.Auth
 
                 // persist auth token to persistant storage
                 var newAccessData = _flickrClient.GetAccessToken();
-                PersistOauthData(newAccessData.token, newAccessData.token);
+                PersistOauthData(newAccessData.token, newAccessData.secret);
 
                 return Unit.Value;
             }

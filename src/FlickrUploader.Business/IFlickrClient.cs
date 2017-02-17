@@ -20,6 +20,8 @@ namespace FlickrUploader.Business
 
         void SetAccessToken(string token, string secret);
 
+        void ResetAccessData();
+
         bool IsAccessTokenValid();
 
         PhotosetCollection PhotosetsGetList();

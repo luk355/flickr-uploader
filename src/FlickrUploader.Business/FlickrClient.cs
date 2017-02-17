@@ -91,5 +91,11 @@ namespace FlickrUploader.Business
 
             return true;
         }
+
+        public void ResetAccessData()
+        {
+            _flickr.OAuthAccessToken = null;
+            _flickr.OAuthAccessTokenSecret = null;
+        }
     }
 }
