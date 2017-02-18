@@ -23,7 +23,7 @@ namespace FlickrUploader.Business.Extensions
             }
             catch (Exception e)
             {
-                Log.Error(e, "Failed to get keywords");
+                Log.Warning(e, "Failed to get keywords");
             }
 
             if (keywords == null)
