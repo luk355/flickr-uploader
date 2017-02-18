@@ -1,17 +1,15 @@
-﻿using System.Net.NetworkInformation;
-using System.Runtime.CompilerServices;
-
-namespace FlickrUploader.Console
+﻿namespace FlickrUploader.Console
 {
     public static class ApplicationSettings
     {
         public static class Flickr
         {
             // TODO load from config
-            public static string ApiKey => "3c520555f1a86a15577ba8923473b707";
-            public static string Secret => "9cf5cdb3d0498139";
+            public static string ApiKey => Startup.Configuration["flickrApiKey"];
+
+            public static string Secret => Startup.Configuration["flickrSecret"];
         }
 
-        public static string PhotoPath => @"D:\pictures\Capture One\Fuji Catalog\Output\Flickr - Full Resolution";
+        public static string PhotoPath => Startup.Configuration["photoPath"];
     }
 }
