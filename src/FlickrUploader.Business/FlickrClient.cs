@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using FlickrNet;
 using FlickrUploader.Business.Extensions;
+using System.Collections.Generic;
 
 namespace FlickrUploader.Business
 {
@@ -96,6 +97,11 @@ namespace FlickrUploader.Business
         {
             _flickr.OAuthAccessToken = null;
             _flickr.OAuthAccessTokenSecret = null;
+        }
+
+        public IList<string> GetPhotoNamesInPhotoset(string photosetId)
+        {
+            return _flickr.PhotosetsGetPhotos(photosetId).Select(x => x.Title).ToList();
         }
     }
 }

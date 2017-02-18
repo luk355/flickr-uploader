@@ -4,6 +4,7 @@ using MediatR;
 using Serilog;
 using UnifiedMediatR.Mediator;
 using FlickrUploader.Core.Eventing;
+using System.IO;
 
 namespace FlickrUploader.Business.Commands
 {
@@ -28,11 +29,11 @@ namespace FlickrUploader.Business.Commands
                 _mediator = mediator;
             }
 
-
-
             Unit IRequestHandler<Command, Unit>.Handle(Command message)
             {
                 var dirInfo = _fileSystem.DirectoryInfo.FromDirectoryName(message.FolderPath);
+
+                var photosetName = dirInfo.Name;
 
                 if (!dirInfo.Exists)
                 {
@@ -40,21 +41,26 @@ namespace FlickrUploader.Business.Commands
                     return Unit.Value;
                 }
 
-                var photos = dirInfo.EnumerateFiles("*.jpg").ToList();
+                var photosToUpload = dirInfo.EnumerateFiles("*.jpg").ToList();
 
-                if (!photos.Any())
+                if (!photosToUpload.Any())
                 {
-                    Log.Information("No photos found in {PhotoFolder}", message.FolderPath);
+                    Log.Debug("No photos found in {PhotoFolder}", message.FolderPath);
                     return Unit.Value;
                 }
 
-                // get photoSet
-                var photosetName = dirInfo.Name;
+                // remove any already already uploaded photos - checking by photo title at the moment
+                var photosetId = _flickrClient.PhotosetsGetList().FirstOrDefault(x => x.Title == photosetName)?.PhotosetId;
+
+                if (photosetId != null)
+                {
+                    var photosInPhotoset = _flickrClient.GetPhotoNamesInPhotoset(photosetId);
+                    photosToUpload.RemoveAll(x => photosInPhotoset.Contains(Path.GetFileNameWithoutExtension(x.FullName)));
+                }
 
                 // upload photos one by one
-
-                Log.Information("Uploading {Photos} photos located in {Folder} folder.", photos.Select(x => x.Name), message.FolderPath);
-                foreach (var photo in photos)
+                Log.Information("Uploading {Photos} photos located in {Folder} folder.", photosToUpload.Select(x => x.Name), message.FolderPath);
+                foreach (var photo in photosToUpload)
                 {
                     _mediator.Execute(new UploadPhoto.Command() { Path = photo.FullName, PhotosetName = photosetName });
                 }

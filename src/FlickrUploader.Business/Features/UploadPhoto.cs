@@ -11,8 +11,8 @@ namespace FlickrUploader.Business.Commands
 
         public class Command : ICommand
         {
-            public string PhotosetName { get; set; }
             public string Path { get; set; }
+            public string PhotosetName { get; set; }
         }
 
         public class PhotoAggregate : ICommandHandler<Command>

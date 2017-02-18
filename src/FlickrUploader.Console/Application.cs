@@ -19,6 +19,10 @@ namespace FlickrUploader.Console
         {
             return Task.Factory.StartNew(() =>
             {
+                // 1) Authenticate
+                // 2) Init - upload all photos not in photosets already
+                // 3) Watch - upload any newly added photos while app is running
+
                 _mediator.Execute(new AuthenticateUser.Command());
 
                 _mediator.Execute(new UploadFolder.Command() {Path = ApplicationSettings.PhotoPath});

@@ -1,4 +1,5 @@
 ﻿using FlickrNet;
+using System.Collections.Generic;
 
 namespace FlickrUploader.Business
 {
@@ -25,5 +26,7 @@ namespace FlickrUploader.Business
         bool IsAccessTokenValid();
 
         PhotosetCollection PhotosetsGetList();
+
+        IList<string> GetPhotoNamesInPhotoset(string photosetId);
     }
 }

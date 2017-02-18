@@ -22,8 +22,6 @@ namespace FlickrUploader.Business.Commands
             private readonly IFileSystem _fileSystem;
             private readonly IUnifiedMediator<string> _mediator;
 
-            private const string ProcessedFileName = ".processed";
-
             public CommandHandler(IFlickrClient flickrClient, IFileSystem fileSystem, IUnifiedMediator<string> mediator)
             {
                 _flickrClient = flickrClient;
@@ -50,21 +48,12 @@ namespace FlickrUploader.Business.Commands
                 // upload photos from all sub-folders
                 foreach (var directory in dirInfo.EnumerateDirectories())
                 {
-                    _mediator.Execute(new Command() { Path = directory.FullName });
-                }
-
-                if (dirInfo.EnumerateFiles(ProcessedFileName).Any())
-                {
-                    Log.Information("Folder {FolderName} has been already processed. Skipping...", message.Path);
-                    return Unit.Value;
+                    _mediator.Execute(new UploadFolder.Command() { Path = directory.FullName });
                 }
 
                 // Upload all photos in folder
                 _mediator.Execute(new UploadPhotosFromFolder.Command() { FolderPath = message.Path });
 
-                // creates processed file in folder
-                var processedFile = new FileInfo(Path.Combine(dirInfo.FullName, ProcessedFileName));
-                processedFile.Create().Close();
 
                 _mediator.Publish(new FolderUploadedEvent() { Id = message.Path });
                 Log.Information("Upload of all photos within folder {FolderPath} is finished!", message.Path);
