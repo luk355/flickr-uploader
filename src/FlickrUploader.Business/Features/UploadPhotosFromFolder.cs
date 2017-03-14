@@ -55,6 +55,8 @@ namespace FlickrUploader.Business.Commands
                 if (photosetId != null)
                 {
                     var photosInPhotoset = _flickrClient.GetPhotoNamesInPhotoset(photosetId);
+                    Log.Information("Album already exists in Flickr with {Photos}. These are not being uploaded again.", photosInPhotoset);
+
                     photosToUpload.RemoveAll(x => photosInPhotoset.Contains(Path.GetFileNameWithoutExtension(x.FullName)));
                 }
 

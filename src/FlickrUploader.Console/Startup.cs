@@ -20,6 +20,7 @@ namespace FlickrUploader.Console
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .WriteTo.ColoredConsole()
+                .WriteTo.RollingFile("log-{Date}.log", outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss,fff} [{Level:u4}] {Message}{NewLine}{Exception}")
                 .CreateLogger();
         }
 
