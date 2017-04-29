@@ -62,4 +62,4 @@ $revision = "{0:D4}" -f [convert]::ToInt32($revision, 10)
 #exec { & dotnet test .\test\UnifiedMediatR.Tests -c Release }
 
 # TODO specify --version-suffix=$revision
-exec { & dotnet publish .\src\FlickrUploader.Console -c Release -o .\artifacts\flickr-uploader-cli }
+exec { & dotnet publish .\src\FlickrUploader.Console -c Release -o bin\publishOutput }
