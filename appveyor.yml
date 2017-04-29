@@ -8,8 +8,10 @@ nuget:
   disable_publish_on_pr: true
 build_script:  
 - ps: .\Build.ps1
+after_build:
+- '7z a flick-uploader-cli.zip %APPVEYOR_BUILD_FOLDER%\artifacts\flickr-uploader-cli\*.*'
 test: off  
 artifacts:  
-- path: .\artifacts\**\*.nupkg
-  name: NuGet
+- path: flick-uploader-cli.zip
+  name: cli
 deploy:
