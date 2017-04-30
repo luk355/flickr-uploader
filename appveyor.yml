@@ -1,4 +1,4 @@
-version: '{build}'  
+version: '0.1.{build}'
 pull_requests:  
   do_not_increment_build_number: true
 branches:  
@@ -15,8 +15,8 @@ artifacts:
 - path: flick-uploader-cli.zip
   name: flickr-uploader-cli
 deploy:
-  release: myproduct-v$(appveyor_build_version)
-  description: 'Release description'
+  release: flickr-uploader-cli-v$(appveyor_build_version)
+  description: 'Flickr uploader CLI'
   provider: GitHub
   auth_token:
     secure: tgBOf2r+5PXSYpvfB+041SWxfv0fWwpbq1gWffX3vg3xLawzHiUMjt5qEQQ6nBF1
@@ -25,4 +25,4 @@ deploy:
   prerelease: true
   on:
     branch: master                 # release from master branch only
-    appveyor_repo_tag: false        # deploy on tag push only
+    appveyor_repo_tag: true        # deploy on tag push only
