@@ -13,5 +13,16 @@ after_build:
 test: off  
 artifacts:  
 - path: flick-uploader-cli.zip
-  name: cli
+  name: flickr-uploader-cli
 deploy:
+  release: myproduct-v$(appveyor_build_version)
+  description: 'Release description'
+  provider: GitHub
+  auth_token:
+    secure: tgBOf2r+5PXSYpvfB+041SWxfv0fWwpbq1gWffX3vg3xLawzHiUMjt5qEQQ6nBF1
+  artifact: flickr-uploader-cli
+  draft: true
+  prerelease: true
+  on:
+    branch: master                 # release from master branch only
+    appveyor_repo_tag: false        # deploy on tag push only
