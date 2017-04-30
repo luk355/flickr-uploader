@@ -9,6 +9,7 @@
 
 ## Nice to have
 - [X] check if picture has been uploaded already - do not upload if already existing
+- [ ] move logging level to config file
 - [ ] Progress bar on upload
 - [ ] Implement as windows service
 - [ ] Provide pretty UI to configure app
