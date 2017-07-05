@@ -12,7 +12,7 @@ Console application supporting upload of images stored on local storage to Flick
 
 Following steps needs to be done only for the very first time. 
 
-1. go ahead, download and unzip latest [release version](https://github.com/luk355/flickr-uploader/releases) from GitHub
+1. go ahead, download and unzip the latest [release version](https://github.com/luk355/flickr-uploader/releases) of `flick-uploader-cli.zip` from GitHub
 1. navigate to [flickr app garden](https://www.flickr.com/services/apps/create/apply) and apply for a non non commercial key
 1. navigate to the unzipped application and modify `appsettings.json` config file
     * copy a Key and Secret values from flickr app you created in step 2
