@@ -61,7 +61,7 @@ namespace FlickrUploader.Business.Commands
                 }
 
                 // upload photos one by one
-                Log.Information("Uploading {Photos} photos located in {Folder} folder.", photosToUpload.Select(x => x.Name), message.FolderPath);
+                Log.Information("Uploading {PhotoCount} photos located in {Folder} folder. {Photos}", photosToUpload.Count, message.FolderPath, photosToUpload.Select(x => x.Name));
                 foreach (var photo in photosToUpload)
                 {
                     _mediator.Execute(new UploadPhoto.Command() { Path = photo.FullName, PhotosetName = photosetName });
