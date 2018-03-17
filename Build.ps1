@@ -34,4 +34,4 @@ $buildSuffix = @{ $true = "$($suffix)-$($commitHash)"; $false = "$($branch)-$($c
 $versionSuffix = @{ $true = "--version-suffix=$($suffix)"; $false = ""}[$suffix -ne ""]
 
 
-exec { & dotnet publish .\src\FlickrUploader.Console -c Release -o bin\publishOutput --include-symbols $versionSuffix }
+exec { & dotnet publish .\src\FlickrUploader.Console -c Release -o bin\publishOutput }
