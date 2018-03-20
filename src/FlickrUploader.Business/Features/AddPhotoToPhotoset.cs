@@ -28,7 +28,7 @@ namespace FlickrUploader.Business.Commands
             }
 
 
-            public Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
                 var photosetId =
                 _flickrClient.PhotosetsGetList().FirstOrDefault(x => x.Title == request.PhotosetName)?.PhotosetId;
@@ -37,11 +37,11 @@ namespace FlickrUploader.Business.Commands
                 // this adds already photoToPhotoset -> no additional photo addtion needed
                 if (string.IsNullOrEmpty(photosetId))
                 {
-                    photosetId = _mediator.Execute(new CreatePhotoset.Command(request.PhotosetName, request.PhotoId));
+                    photosetId = await _mediator.Execute(new CreatePhotoset.Command(request.PhotosetName, request.PhotoId));
 
                     _mediator.Publish(new PhotoAddedAsMainToPhotosetEvent() { Id = request.PhotoId, PhotosetId = photosetId });
 
-                    return Task.FromResult(Unit.Value);
+                    return Unit.Value;
                 }
 
                 if (string.IsNullOrEmpty(photosetId))
@@ -53,7 +53,7 @@ namespace FlickrUploader.Business.Commands
 
                 _mediator.Publish(new PhotoAddedToPhotosetEvent() { Id = request.PhotoId, PhotosetId = photosetId });
 
-                return Task.FromResult(Unit.Value);
+                return Unit.Value;
             }
 
 

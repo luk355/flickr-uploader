@@ -1,4 +1,5 @@
 ﻿using FlickrUploader.Core.Eventing;
+using System.Threading.Tasks;
 
 namespace FlickrUploader.Core.Mediator
 {
@@ -8,7 +9,7 @@ namespace FlickrUploader.Core.Mediator
         /// Execute a command.
         /// </summary>
         /// <param name="command"></param>
-        void Execute(ICommand command);
+        Task Execute(ICommand command);
 
         /// <summary>
         /// Executes a command returns ing a TResult
@@ -16,7 +17,7 @@ namespace FlickrUploader.Core.Mediator
         /// <typeparam name="TResult"></typeparam>
         /// <param name="command"></param>
         /// <returns></returns>
-        TResult Execute<TResult>(ICommand<TResult> command);
+        Task<TResult> Execute<TResult>(ICommand<TResult> command);
 
         /// <summary>
         /// Publish a domain event.
@@ -24,26 +25,13 @@ namespace FlickrUploader.Core.Mediator
         /// <param name="domainEvent"></param>
         void Publish(IDomainEvent domainEvent);
 
-        ///// <summary>
-        ///// Publish a system event.
-        ///// </summary>
-        ///// <param name="systemEvent"></param>
-        //void Publish(ISystemEvent systemEvent);
-
-        ///// <summary>
-        ///// Publish a system event asynchronously.
-        ///// </summary>
-        ///// <param name="systemEvent"></param>
-        ///// <returns></returns>
-        //Task PublishAsync(IAsyncSystemEvent systemEvent);
-
         /// <summary>
         /// Execute a query.
         /// </summary>
         /// <typeparam name="TResult"></typeparam>
         /// <param name="query"></param>
         /// <returns></returns>
-        TResult Query<TResult>(IQuery<TResult> query);
+        Task<TResult> Query<TResult>(IQuery<TResult> query);
 
     }
 }

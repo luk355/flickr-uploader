@@ -30,13 +30,13 @@ namespace FlickrUploader.Business.Commands
                 _mediator = mediator;
             }
 
-            public Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
                 // upload photo
                 var id = _flickrClient.UploadPicture(request.Path, Path.GetFileNameWithoutExtension(request.Path));
 
                 // add photo to photoset
-                _mediator.Execute(new AddPhotoToPhotoset.Command()
+                await _mediator.Execute(new AddPhotoToPhotoset.Command()
                 {
                     PhotoId = id,
                     PhotosetName = request.PhotosetName
@@ -44,7 +44,7 @@ namespace FlickrUploader.Business.Commands
 
                 _mediator.Publish(new PhotoUploadedEvent() { Id = id, PhotoSet = request.PhotosetName });
 
-                return Task.FromResult(Unit.Value);
+                return Unit.Value;
             }
         }
 

@@ -16,7 +16,7 @@ namespace FlickrUploader.Console
                 var container = Container.For<ConsoleRegistry>();
 
                 container.AssertConfigurationIsValid();
-                //Log.Information("Container has {@ContainerContent}", container.WhatDoIHave());
+                Log.Information("Container has {@ContainerContent}", container.WhatDoIHave());
 
                 var app = container.GetInstance<Application>();
                 app.Run().Wait();

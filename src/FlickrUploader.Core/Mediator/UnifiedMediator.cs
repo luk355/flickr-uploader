@@ -1,5 +1,6 @@
 ﻿using FlickrUploader.Core.Eventing;
 using MediatR;
+using System.Threading.Tasks;
 
 namespace FlickrUploader.Core.Mediator
 {
@@ -12,16 +13,16 @@ namespace FlickrUploader.Core.Mediator
             _mediator = mediator;
         }
 
-        public void Execute(ICommand command)
+        public Task Execute(ICommand command)
         {
-            _mediator.Send(command);
+            return _mediator.Send(command);
         }
 
-        public TResult Execute<TResult>(ICommand<TResult> command)
+        public Task<TResult> Execute<TResult>(ICommand<TResult> command)
         {
             // TODO this might not be the best way to do it
             // see this - https://www.youtube.com/watch?v=bda13k0vfc0
-            return _mediator.Send(command).Result;
+            return _mediator.Send(command);
         }
 
         public void Publish(IDomainEvent domainEvent)
@@ -29,9 +30,9 @@ namespace FlickrUploader.Core.Mediator
             _mediator.Publish(domainEvent);
         }
 
-        public TResult Query<TResult>(IQuery<TResult> query)
+        public Task<TResult> Query<TResult>(IQuery<TResult> query)
         {
-            return _mediator.Send(query).Result;
+            return _mediator.Send(query);
         }
     }
 }

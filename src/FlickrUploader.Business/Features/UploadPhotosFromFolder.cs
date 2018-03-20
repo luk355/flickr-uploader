@@ -31,7 +31,7 @@ namespace FlickrUploader.Business.Commands
                 _mediator = mediator;
             }
 
-            public Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
                 var dirInfo = _fileSystem.DirectoryInfo.FromDirectoryName(request.FolderPath);
 
@@ -40,7 +40,7 @@ namespace FlickrUploader.Business.Commands
                 if (!dirInfo.Exists)
                 {
                     Log.Error("Folder {FolderName} does not exist!", request.FolderPath);
-                    return Task.FromResult(Unit.Value);
+                    return Unit.Value;
                 }
 
                 var photosToUpload = dirInfo.EnumerateFiles("*.jpg").ToList();
@@ -48,7 +48,7 @@ namespace FlickrUploader.Business.Commands
                 if (!photosToUpload.Any())
                 {
                     Log.Debug("No photos found in {PhotoFolder}", request.FolderPath);
-                    return Task.FromResult(Unit.Value);
+                    return Unit.Value;
                 }
 
                 // remove any already already uploaded photos - checking by photo title at the moment
@@ -66,12 +66,12 @@ namespace FlickrUploader.Business.Commands
                 Log.Information("Uploading {PhotoCount} photos located in {Folder} folder. {Photos}", photosToUpload.Count, request.FolderPath, photosToUpload.Select(x => x.Name));
                 foreach (var photo in photosToUpload)
                 {
-                    _mediator.Execute(new UploadPhoto.Command() { Path = photo.FullName, PhotosetName = photosetName });
+                    await _mediator.Execute(new UploadPhoto.Command() { Path = photo.FullName, PhotosetName = photosetName });
                 }
 
                 _mediator.Publish(new PhotosFromFolderUploadedEvent() { Id = request.FolderPath });
 
-                return Task.FromResult(Unit.Value);
+                return Unit.Value;
             }
         }
 

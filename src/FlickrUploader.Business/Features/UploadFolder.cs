@@ -29,36 +29,36 @@ namespace FlickrUploader.Business.Commands
                 _mediator = mediator;
             }
 
-            public Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
                 var dirInfo = _fileSystem.DirectoryInfo.FromDirectoryName(request.Path);
 
                 if (!dirInfo.Exists)
                 {
                     Log.Error("Folder {FolderName} does not exist!", request.Path);
-                    return Task.FromResult(Unit.Value);
+                    return Unit.Value;
                 }
 
                 if (!dirInfo.HasWritePermisssion())
                 {
                     Log.Error("Missing write rights to folder {FolderName}!", request.Path);
-                    Task.FromResult(Unit.Value);
+                    return Unit.Value;
                 }
 
                 // upload photos from all sub-folders
                 foreach (var directory in dirInfo.EnumerateDirectories())
                 {
-                    _mediator.Execute(new UploadFolder.Command() { Path = directory.FullName });
+                    await _mediator.Execute(new UploadFolder.Command() { Path = directory.FullName });
                 }
 
                 // Upload all photos in folder
-                _mediator.Execute(new UploadPhotosFromFolder.Command() { FolderPath = request.Path });
+                await _mediator.Execute(new UploadPhotosFromFolder.Command() { FolderPath = request.Path });
 
 
                 _mediator.Publish(new FolderUploadedEvent() { Id = request.Path });
                 Log.Information("Upload of all photos within folder {FolderPath} is finished!", request.Path);
 
-                return Task.FromResult(Unit.Value);
+                return Unit.Value;
             }
         }
 
