@@ -1,5 +1,7 @@
-﻿using MediatR;
-using UnifiedMediatR.Mediator;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using FlickrUploader.Core.Mediator;
+using MediatR;
 
 namespace FlickrUploader.Business.Features.Auth
 {
@@ -15,11 +17,11 @@ namespace FlickrUploader.Business.Features.Auth
         public class CommandHandler : ICommandHandler<Command>
         {
             private readonly IFlickrClient _flickrClient;
-            private readonly IUnifiedMediator<string> _mediator;
+            private readonly IUnifiedMediator _mediator;
             private readonly IAuthCodeProvider _authCodeProvider;
             private readonly IPersistentStorage _persistentStorage;
 
-            public CommandHandler(IUnifiedMediator<string> mediator, IFlickrClient flickrClient, IAuthCodeProvider authCodeProvider, IPersistentStorage persistentStorage)
+            public CommandHandler(IUnifiedMediator mediator, IFlickrClient flickrClient, IAuthCodeProvider authCodeProvider, IPersistentStorage persistentStorage)
             {
                 _mediator = mediator;
                 _flickrClient = flickrClient;
@@ -27,7 +29,7 @@ namespace FlickrUploader.Business.Features.Auth
                 _persistentStorage = persistentStorage;
             }
 
-            Unit IRequestHandler<Command, Unit>.Handle(Command message)
+            public Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
                 // checks cookie storage and configures flickrClient
                 // TODO cookie stuff!
@@ -37,7 +39,7 @@ namespace FlickrUploader.Business.Features.Auth
                 // has flickr access
                 if (_flickrClient.IsAccessTokenValid())
                 {
-                    return Unit.Value;
+                    return Task.FromResult(Unit.Value);
                 }
 
                 // if this does not work authorise again
@@ -58,7 +60,7 @@ namespace FlickrUploader.Business.Features.Auth
                 var newAccessData = _flickrClient.GetAccessToken();
                 PersistOauthData(newAccessData.token, newAccessData.secret);
 
-                return Unit.Value;
+                return Task.FromResult(Unit.Value);
             }
 
             private (string token, string secret) LoadOauthDataFromPersistantStorage()

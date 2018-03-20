@@ -1,5 +1,7 @@
-﻿using FlickrUploader.Core.Eventing;
-using UnifiedMediatR.Mediator;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using FlickrUploader.Core.Eventing;
+using FlickrUploader.Core.Mediator;
 
 namespace FlickrUploader.Business.Commands
 {
@@ -21,20 +23,19 @@ namespace FlickrUploader.Business.Commands
         public class CommandHandler : ICommandHandler<Command, string>
         {
             private readonly IFlickrClient _flickrClient;
-            private readonly IUnifiedMediator<string> _mediator;
+            private readonly IUnifiedMediator _mediator;
 
-            public CommandHandler(IFlickrClient flickrClient, IUnifiedMediator<string> mediator)
+            public CommandHandler(IFlickrClient flickrClient, IUnifiedMediator mediator)
             {
                 _flickrClient = flickrClient;
                 _mediator = mediator;
             }
 
-            public string Handle(Command message)
+
+            public Task<string> Handle(Command request, CancellationToken cancellationToken)
             {
-                return _flickrClient.CreatePhotoset(message.Name, message.PrimaryPhotoId);
+                return Task.FromResult(_flickrClient.CreatePhotoset(request.Name, request.PrimaryPhotoId));
             }
-
-
         }
 
         public class PhotosetCreatedEvent : IDomainEvent

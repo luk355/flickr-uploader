@@ -1,16 +1,16 @@
 ﻿using System.Threading.Tasks;
 using FlickrUploader.Business.Commands;
 using Serilog;
-using UnifiedMediatR.Mediator;
 using FlickrUploader.Business.Features.Auth;
+using FlickrUploader.Core.Mediator;
 
 namespace FlickrUploader.Console
 {
     public class Application
     {
-        private readonly IUnifiedMediator<string> _mediator;
+        private readonly IUnifiedMediator _mediator;
 
-        public Application(IUnifiedMediator<string> mediator)
+        public Application(IUnifiedMediator mediator)
         {
             _mediator = mediator;
         }

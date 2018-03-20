@@ -1,8 +1,10 @@
 ﻿using System.IO;
 using System.IO.Abstractions;
 using MediatR;
-using UnifiedMediatR.Mediator;
 using FlickrUploader.Core.Eventing;
+using FlickrUploader.Core.Mediator;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace FlickrUploader.Business.Commands
 {
@@ -19,30 +21,30 @@ namespace FlickrUploader.Business.Commands
         {
             private readonly IFlickrClient _flickrClient;
             private readonly IFileSystem _fileSystem;
-            private readonly IUnifiedMediator<string> _mediator;
+            private readonly IUnifiedMediator _mediator;
 
-            public PhotoAggregate(IFlickrClient flickrClient, IFileSystem fileSystem, IUnifiedMediator<string> mediator)
+            public PhotoAggregate(IFlickrClient flickrClient, IFileSystem fileSystem, IUnifiedMediator mediator)
             {
                 _flickrClient = flickrClient;
                 _fileSystem = fileSystem;
                 _mediator = mediator;
             }
 
-            public Unit Handle(Command message)
+            public Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
                 // upload photo
-                var id = _flickrClient.UploadPicture(message.Path, Path.GetFileNameWithoutExtension(message.Path));
+                var id = _flickrClient.UploadPicture(request.Path, Path.GetFileNameWithoutExtension(request.Path));
 
                 // add photo to photoset
                 _mediator.Execute(new AddPhotoToPhotoset.Command()
                 {
                     PhotoId = id,
-                    PhotosetName = message.PhotosetName
+                    PhotosetName = request.PhotosetName
                 });
 
-                _mediator.Publish(new PhotoUploadedEvent() { Id = id, PhotoSet = message.PhotosetName });
+                _mediator.Publish(new PhotoUploadedEvent() { Id = id, PhotoSet = request.PhotosetName });
 
-                return Unit.Value;
+                return Task.FromResult(Unit.Value);
             }
         }
 

@@ -1,8 +1,8 @@
-﻿using UnifiedMediatR.Eventing;
+﻿using MediatR;
 
 namespace FlickrUploader.Core.Eventing
 {
-    public interface IAsyncDomainEventHandler<in TEvent> : IAsyncDomainEventHandler<TEvent, string> where TEvent : IAsyncDomainEvent
+    public interface IAsyncDomainEventHandler<in TEvent> : INotificationHandler<TEvent> where TEvent : IAsyncDomainEvent
     {
     }
 }
