@@ -1,5 +1,4 @@
-﻿using System;
-using Serilog;
+﻿using Serilog;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 
@@ -23,7 +22,6 @@ namespace FlickrUploader.Console
                 .WriteTo.RollingFile("log-{Date}.log", outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss,fff} [{Level:u4}] {Message}{NewLine}{Exception}")
                 .CreateLogger();
         }
-
 
         private static void LoadAppSettings()
         {

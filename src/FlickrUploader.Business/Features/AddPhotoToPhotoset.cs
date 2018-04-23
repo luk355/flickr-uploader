@@ -27,7 +27,6 @@ namespace FlickrUploader.Business.Commands
                 _mediator = mediator;
             }
 
-
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
                 var photosetId =
@@ -55,8 +54,6 @@ namespace FlickrUploader.Business.Commands
 
                 return Unit.Value;
             }
-
-
         }
 
         public class PhotoAddedAsMainToPhotosetEvent : PhotoAddedToPhotosetEvent

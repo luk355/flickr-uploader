@@ -31,7 +31,6 @@ namespace FlickrUploader.Business.Commands
                 _mediator = mediator;
             }
 
-
             public Task<string> Handle(Command request, CancellationToken cancellationToken)
             {
                 return Task.FromResult(_flickrClient.CreatePhotoset(request.Name, request.PrimaryPhotoId));
