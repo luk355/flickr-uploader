@@ -1,13 +1,13 @@
-﻿using System;
-using FlickrUploader.Console.DependencyResolution;
+﻿using FlickrUploader.Console.DependencyResolution;
 using Serilog;
 using StructureMap;
+using System;
 
 namespace FlickrUploader.Console
 {
-    public class Program
+    class Program
     {
-        public static void Main(string[] args)
+        static void Main(string[] args)
         {
             try
             {
@@ -27,6 +27,5 @@ namespace FlickrUploader.Console
                 System.Console.ReadKey();
             }
         }
-
     }
 }

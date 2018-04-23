@@ -10,11 +10,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		ToDo.md = ToDo.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlickrUploader.Business", "src\FlickrUploader.Business\FlickrUploader.Business.csproj", "{928B2690-8270-4156-9560-1F2EA0E51983}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlickrUploader.Console", "src\FlickrUploader.Console\FlickrUploader.Console.csproj", "{685D041B-836B-47B9-B751-7D1C3752B013}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlickrUploader.Core", "src\FlickrUploader.Core\FlickrUploader.Core.csproj", "{BFE58EFC-5AAC-4C56-BE72-F65F6E9E3BF0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlickrUploader.Business", "src\FlickrUploader.Business\FlickrUploader.Business.csproj", "{D4FFCD64-7CAF-462D-8CBE-8E889FF2F312}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlickrUploader.Console", "src\FlickrUploader.Console\FlickrUploader.Console.csproj", "{96971CA0-6303-4FA7-A046-8AB3E2E76D70}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,26 +22,26 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{928B2690-8270-4156-9560-1F2EA0E51983}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{928B2690-8270-4156-9560-1F2EA0E51983}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{928B2690-8270-4156-9560-1F2EA0E51983}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{928B2690-8270-4156-9560-1F2EA0E51983}.Release|Any CPU.Build.0 = Release|Any CPU
-		{685D041B-836B-47B9-B751-7D1C3752B013}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{685D041B-836B-47B9-B751-7D1C3752B013}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{685D041B-836B-47B9-B751-7D1C3752B013}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{685D041B-836B-47B9-B751-7D1C3752B013}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BFE58EFC-5AAC-4C56-BE72-F65F6E9E3BF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BFE58EFC-5AAC-4C56-BE72-F65F6E9E3BF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFE58EFC-5AAC-4C56-BE72-F65F6E9E3BF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFE58EFC-5AAC-4C56-BE72-F65F6E9E3BF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4FFCD64-7CAF-462D-8CBE-8E889FF2F312}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4FFCD64-7CAF-462D-8CBE-8E889FF2F312}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4FFCD64-7CAF-462D-8CBE-8E889FF2F312}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4FFCD64-7CAF-462D-8CBE-8E889FF2F312}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96971CA0-6303-4FA7-A046-8AB3E2E76D70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96971CA0-6303-4FA7-A046-8AB3E2E76D70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96971CA0-6303-4FA7-A046-8AB3E2E76D70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96971CA0-6303-4FA7-A046-8AB3E2E76D70}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{928B2690-8270-4156-9560-1F2EA0E51983} = {5C441C31-ACD1-40A9-A052-B7A3DDF406A4}
-		{685D041B-836B-47B9-B751-7D1C3752B013} = {5C441C31-ACD1-40A9-A052-B7A3DDF406A4}
 		{BFE58EFC-5AAC-4C56-BE72-F65F6E9E3BF0} = {5C441C31-ACD1-40A9-A052-B7A3DDF406A4}
+		{D4FFCD64-7CAF-462D-8CBE-8E889FF2F312} = {5C441C31-ACD1-40A9-A052-B7A3DDF406A4}
+		{96971CA0-6303-4FA7-A046-8AB3E2E76D70} = {5C441C31-ACD1-40A9-A052-B7A3DDF406A4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3CC9D72B-FE1D-4186-81AD-BE2B572681DB}

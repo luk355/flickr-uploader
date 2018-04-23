@@ -1,9 +1,9 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using FlickrNet;
 using FlickrUploader.Business.Extensions;
 using System.Collections.Generic;
+using FlickrUploader.Business.Utils;
 
 namespace FlickrUploader.Business
 {
@@ -16,7 +16,6 @@ namespace FlickrUploader.Business
         public FlickrClient(string apiKey, string secret)
         {
             _flickr = new Flickr(apiKey, secret);
-
         }
 
         public void SendAuthenticationRequest()
@@ -25,7 +24,7 @@ namespace FlickrUploader.Business
 
             string url = _flickr.OAuthCalculateAuthorizationUrl(requestToken.Token, AuthLevel.Write);
 
-            System.Diagnostics.Process.Start(url);
+            UrlUtils.OpenBrowser(url);
         }
 
         public void CompleteAutentication(string code)
