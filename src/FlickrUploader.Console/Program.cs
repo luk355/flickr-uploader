@@ -1,13 +1,14 @@
-﻿using System;
-using FlickrUploader.Console.DependencyResolution;
+﻿using FlickrUploader.Console.DependencyResolution;
 using Serilog;
 using StructureMap;
+using System;
+using System.Threading.Tasks;
 
 namespace FlickrUploader.Console
 {
-    public class Program
+    class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             try
             {
@@ -16,10 +17,10 @@ namespace FlickrUploader.Console
                 var container = Container.For<ConsoleRegistry>();
 
                 container.AssertConfigurationIsValid();
-                //Log.Information("Container has {@ContainerContent}", container.WhatDoIHave());
+                Log.Information("Container has {@ContainerContent}", container.WhatDoIHave());
 
                 var app = container.GetInstance<Application>();
-                app.Run().Wait();
+                await app.Run();
             }
             catch (Exception ex)
             {
@@ -27,6 +28,5 @@ namespace FlickrUploader.Console
                 System.Console.ReadKey();
             }
         }
-
     }
 }

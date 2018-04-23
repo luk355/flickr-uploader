@@ -2,9 +2,11 @@
 using System.Linq;
 using MediatR;
 using Serilog;
-using UnifiedMediatR.Mediator;
 using FlickrUploader.Core.Eventing;
 using System.IO;
+using FlickrUploader.Core.Mediator;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace FlickrUploader.Business.Commands
 {
@@ -20,24 +22,24 @@ namespace FlickrUploader.Business.Commands
         {
             private readonly IFlickrClient _flickrClient;
             private readonly IFileSystem _fileSystem;
-            private readonly IUnifiedMediator<string> _mediator;
+            private readonly IUnifiedMediator _mediator;
 
-            public CommandHandler(IFlickrClient flickrClient, IFileSystem fileSystem, IUnifiedMediator<string> mediator)
+            public CommandHandler(IFlickrClient flickrClient, IFileSystem fileSystem, IUnifiedMediator mediator)
             {
                 _flickrClient = flickrClient;
                 _fileSystem = fileSystem;
                 _mediator = mediator;
             }
 
-            Unit IRequestHandler<Command, Unit>.Handle(Command message)
+            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var dirInfo = _fileSystem.DirectoryInfo.FromDirectoryName(message.FolderPath);
+                var dirInfo = _fileSystem.DirectoryInfo.FromDirectoryName(request.FolderPath);
 
                 var photosetName = dirInfo.Name;
 
                 if (!dirInfo.Exists)
                 {
-                    Log.Error("Folder {FolderName} does not exist!", message.FolderPath);
+                    Log.Error("Folder {FolderName} does not exist!", request.FolderPath);
                     return Unit.Value;
                 }
 
@@ -45,7 +47,7 @@ namespace FlickrUploader.Business.Commands
 
                 if (!photosToUpload.Any())
                 {
-                    Log.Debug("No photos found in {PhotoFolder}", message.FolderPath);
+                    Log.Debug("No photos found in {PhotoFolder}", request.FolderPath);
                     return Unit.Value;
                 }
 
@@ -61,13 +63,13 @@ namespace FlickrUploader.Business.Commands
                 }
 
                 // upload photos one by one
-                Log.Information("Uploading {PhotoCount} photos located in {Folder} folder. {Photos}", photosToUpload.Count, message.FolderPath, photosToUpload.Select(x => x.Name));
+                Log.Information("Uploading {PhotoCount} photos located in {Folder} folder. {Photos}", photosToUpload.Count, request.FolderPath, photosToUpload.Select(x => x.Name));
                 foreach (var photo in photosToUpload)
                 {
-                    _mediator.Execute(new UploadPhoto.Command() { Path = photo.FullName, PhotosetName = photosetName });
+                    await _mediator.Execute(new UploadPhoto.Command() { Path = photo.FullName, PhotosetName = photosetName });
                 }
 
-                _mediator.Publish(new PhotosFromFolderUploadedEvent() { Id = message.FolderPath });
+                _mediator.Publish(new PhotosFromFolderUploadedEvent() { Id = request.FolderPath });
 
                 return Unit.Value;
             }

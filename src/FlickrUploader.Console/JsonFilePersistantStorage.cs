@@ -16,8 +16,6 @@ namespace FlickrUploader.Console
             _fileSystem = fileSystem;
         }
 
-        
-
         public string LoadValue(string key)
         {
             if (!_fileSystem.File.Exists(fileName))
@@ -42,7 +40,6 @@ namespace FlickrUploader.Console
             Log.Information($"Persisting Key: {key}, value: {value}");
             
             IDictionary<string, string> values = new Dictionary<string, string>();
-
 
             // TODO add lock
             if (_fileSystem.File.Exists(fileName))
