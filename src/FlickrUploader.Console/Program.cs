@@ -2,12 +2,13 @@
 using Serilog;
 using StructureMap;
 using System;
+using System.Threading.Tasks;
 
 namespace FlickrUploader.Console
 {
     class Program
     {
-        static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             try
             {
@@ -19,7 +20,7 @@ namespace FlickrUploader.Console
                 Log.Information("Container has {@ContainerContent}", container.WhatDoIHave());
 
                 var app = container.GetInstance<Application>();
-                app.Run().Wait();
+                await app.Run();
             }
             catch (Exception ex)
             {
