@@ -33,5 +33,7 @@ $commitHash = $(git rev-parse --short HEAD)
 $buildSuffix = @{ $true = "$($suffix)-$($commitHash)"; $false = "$($branch)-$($commitHash)" }[$suffix -ne ""]
 $versionSuffix = @{ $true = "--version-suffix=$($suffix)"; $false = ""}[$suffix -ne ""]
 
+echo "build: Package version suffix is $suffix"
+echo "build: Build version suffix is $buildSuffix" 
 
 exec { & dotnet publish .\src\FlickrUploader.Console -c Release -o bin\publishOutput }
