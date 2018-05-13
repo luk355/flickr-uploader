@@ -7,7 +7,7 @@ Console application supporting upload of images stored on local storage to Flick
 * creates "Sets" based on the folder name the image is stored in
 * does not duplicate photos already existing in the current photoset
 * supports deep folder hierarchy
-* works on both linux/windows operating systems.
+* works on both linux/windows operating systems
 
 ## setup
 
