@@ -23,6 +23,8 @@ namespace FlickrUploader.Console
 
             await _mediator.Execute(new AuthenticateUser.Command());
 
+            Log.Information("Starting image upload from {Folder} folder.", ApplicationSettings.PhotoPath);
+
             await _mediator.Execute(new UploadFolder.Command() { Path = ApplicationSettings.PhotoPath });
 
             Log.Information("All done! Pres any key to end the application :)");
