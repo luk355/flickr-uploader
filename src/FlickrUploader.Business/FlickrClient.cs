@@ -4,6 +4,7 @@ using FlickrNet;
 using FlickrUploader.Business.Extensions;
 using System.Collections.Generic;
 using FlickrUploader.Business.Utils;
+using System;
 
 namespace FlickrUploader.Business
 {
@@ -15,6 +16,11 @@ namespace FlickrUploader.Business
 
         public FlickrClient(string apiKey, string secret)
         {
+            if (string.IsNullOrEmpty(apiKey) || string.IsNullOrEmpty(secret))
+            {
+                throw new ArgumentNullException("Token or Secret value has not been set. Please check appsettings.json and update values first.");
+            }
+
             _flickr = new Flickr(apiKey, secret);
         }
 

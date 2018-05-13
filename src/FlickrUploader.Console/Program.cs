@@ -14,11 +14,11 @@ namespace FlickrUploader.Console
             {
                 Startup.Configure();
 
+                Log.Information("Starting application.");
+
                 var container = Container.For<ConsoleRegistry>();
 
                 container.AssertConfigurationIsValid();
-
-                Log.Information("Starting application.");
                 Log.Debug("Container has {@ContainerContent}", container.WhatDoIHave());
 
                 var app = container.GetInstance<Application>();
