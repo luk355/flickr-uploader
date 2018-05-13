@@ -11,7 +11,7 @@ after_build:
 - '7z a flick-uploader-cli-linux-x64.zip %APPVEYOR_BUILD_FOLDER%\src\FlickrUploader.Console\bin\publishOutput\linux-x64\*.*'
 test: off  
 artifacts:  
-- path: flick-uploader-cli.zip
+- path: 'flick-uploader-cli*.zip'
   name: flickr-uploader-cli
 deploy:
   release: flickr-uploader-cli-v$(appveyor_build_version)
