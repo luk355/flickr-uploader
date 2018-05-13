@@ -10,14 +10,14 @@ namespace FlickrUploader.Console
 
         public static void Configure()
         {
-            ConfigureLogging();
             LoadAppSettings();
+            ConfigureLogging();
         }
 
         private static void ConfigureLogging()
         {
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
+                .ReadFrom.Configuration(Configuration)
                 .WriteTo.ColoredConsole()
                 .WriteTo.RollingFile("log-{Date}.log", outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss,fff} [{Level:u4}] {Message}{NewLine}{Exception}")
                 .CreateLogger();
@@ -27,7 +27,8 @@ namespace FlickrUploader.Console
         {
             var builder = new ConfigurationBuilder()
              .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json");
+            .AddJsonFile("appsettings.json")
+            .AddEnvironmentVariables();
 
             Configuration = builder.Build();
 

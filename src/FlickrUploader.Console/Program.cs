@@ -17,14 +17,16 @@ namespace FlickrUploader.Console
                 var container = Container.For<ConsoleRegistry>();
 
                 container.AssertConfigurationIsValid();
-                Log.Information("Container has {@ContainerContent}", container.WhatDoIHave());
+
+                Log.Information("Starting application.");
+                Log.Debug("Container has {@ContainerContent}", container.WhatDoIHave());
 
                 var app = container.GetInstance<Application>();
                 await app.Run();
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error!");
+                Log.Error(ex, "Error: {ErrorMessage}", ex.Message);
                 System.Console.ReadKey();
             }
         }

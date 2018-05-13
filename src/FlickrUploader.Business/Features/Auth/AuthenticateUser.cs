@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using FlickrUploader.Core.Mediator;
 using MediatR;
@@ -34,6 +35,12 @@ namespace FlickrUploader.Business.Features.Auth
                 // checks cookie storage and configures flickrClient
                 // TODO cookie stuff!
                 (string token, string secret) accessData = LoadOauthDataFromPersistantStorage();
+
+                if (string.IsNullOrEmpty(accessData.token) || string.IsNullOrEmpty(accessData.secret))
+                {
+                    throw new InvalidOperationException("Token or Secret value has not been set. Please check appsettings.json and update values first.");
+                }
+
                 _flickrClient.SetAccessToken(accessData.token, accessData.secret);
 
                 // has flickr access
