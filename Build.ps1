@@ -36,4 +36,5 @@ $versionSuffix = @{ $true = "--version-suffix=$($suffix)"; $false = ""}[$suffix 
 echo "build: Package version suffix is $suffix"
 echo "build: Build version suffix is $buildSuffix" 
 
-exec { & dotnet publish .\src\FlickrUploader.Console -c Release -o bin\publishOutput }
+exec { & dotnet publish .\src\FlickrUploader.Console -c Release -r win-x86 -o bin\publishOutput\win-x86 }
+exec { & dotnet publish .\src\FlickrUploader.Console -c Release -r linux-x64 -o bin\publishOutput\linux-x64 }

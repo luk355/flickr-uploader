@@ -7,7 +7,8 @@ nuget:
 build_script:  
 - ps: .\Build.ps1
 after_build:
-- '7z a flick-uploader-cli.zip %APPVEYOR_BUILD_FOLDER%\src\FlickrUploader.Console\bin\publishOutput\*.*'
+- '7z a flick-uploader-cli-win-x86.zip %APPVEYOR_BUILD_FOLDER%\src\FlickrUploader.Console\bin\publishOutput\win-x86\*.*'
+- '7z a flick-uploader-cli-linux-x64.zip %APPVEYOR_BUILD_FOLDER%\src\FlickrUploader.Console\bin\publishOutput\linux-x64\*.*'
 test: off  
 artifacts:  
 - path: flick-uploader-cli.zip
