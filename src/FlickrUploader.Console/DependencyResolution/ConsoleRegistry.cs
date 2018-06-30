@@ -5,6 +5,7 @@ using MediatR;
 using StructureMap;
 using FlickrUploader.Business.Features.Auth;
 using FlickrUploader.Core.Mediator;
+using FlickrUploader.Console.ShellProgress;
 
 namespace FlickrUploader.Console.DependencyResolution
 {
@@ -33,6 +34,8 @@ namespace FlickrUploader.Console.DependencyResolution
             For<IFileSystem>().Use<FileSystem>();
             For<IAuthCodeProvider>().Use<ConsoleAuthCodeProvider>();
             For<IPersistentStorage>().Use<JsonFilePersistantStorage>();
+
+            ForConcreteType<ShellProgressBarManager>().Configure.Singleton();
         }
     }
 }

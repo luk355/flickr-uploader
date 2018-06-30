@@ -26,6 +26,12 @@ namespace FlickrUploader.Core.Mediator
         void Publish(IDomainEvent domainEvent);
 
         /// <summary>
+        /// Publish a domain event.
+        /// </summary>
+        /// <param name="domainEvent"></param>
+        void Publish(IAsyncDomainEvent domainEvent);
+
+        /// <summary>
         /// Execute a query.
         /// </summary>
         /// <typeparam name="TResult"></typeparam>

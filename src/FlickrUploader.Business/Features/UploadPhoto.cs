@@ -42,7 +42,7 @@ namespace FlickrUploader.Business.Commands
                     PhotosetName = request.PhotosetName
                 });
 
-                _mediator.Publish(new PhotoUploadedEvent() { Id = id, PhotoSet = request.PhotosetName });
+                _mediator.Publish(new PhotoUploadedEvent() { Id = id, Path = request.Path, PhotoSet = request.PhotosetName });
 
                 return Unit.Value;
             }
@@ -51,6 +51,8 @@ namespace FlickrUploader.Business.Commands
         public class PhotoUploadedEvent : IDomainEvent
         {
             public string Id { get; set; }
+
+            public string Path { get; set; }
 
             public string PhotoSet { get; set; }
         }

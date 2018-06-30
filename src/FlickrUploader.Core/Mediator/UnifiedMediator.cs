@@ -30,6 +30,11 @@ namespace FlickrUploader.Core.Mediator
             _mediator.Publish(domainEvent);
         }
 
+        public void Publish(IAsyncDomainEvent domainEvent)
+        {
+            _mediator.Publish(domainEvent);
+        }
+
         public Task<TResult> Query<TResult>(IQuery<TResult> query)
         {
             return _mediator.Send(query);

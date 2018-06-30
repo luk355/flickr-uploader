@@ -60,7 +60,15 @@ namespace FlickrUploader.Business.Commands
                     Log.Information("Album already exists in Flickr with {Photos}. These are not being uploaded again.", photosInPhotoset);
 
                     photosToUpload.RemoveAll(x => photosInPhotoset.Contains(Path.GetFileNameWithoutExtension(x.FullName)));
+
+                    if (!photosToUpload.Any())
+                    {
+                        Log.Information("All photos from {PhotoFolder} has been uploaded already.", request.FolderPath);
+                        return Unit.Value;
+                    }
                 }
+
+                _mediator.Publish(new UploadOfPhotosStarted(request.FolderPath, photosToUpload.Count));
 
                 // upload photos one by one
                 Log.Information("Uploading {PhotoCount} photos located in {Folder} folder. {Photos}", photosToUpload.Count, request.FolderPath, photosToUpload.Select(x => x.Name));
@@ -73,6 +81,19 @@ namespace FlickrUploader.Business.Commands
 
                 return Unit.Value;
             }
+        }
+
+        public class UploadOfPhotosStarted : IAsyncDomainEvent
+        {
+            public UploadOfPhotosStarted(string folderName, int photosToUpload)
+            {
+                Id = folderName;
+                PhotosToUpload = photosToUpload;
+            }
+
+            public string Id { get; }
+
+            public int PhotosToUpload { get; }
         }
 
         public class PhotosFromFolderUploadedEvent : IDomainEvent
